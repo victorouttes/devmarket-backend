@@ -55,10 +55,44 @@ paths:
       responses:
         "201":
           description: item created
-        "400":
-          description: invalid input, object invalid
-        "409":
-          description: an existing item already exists
+    patch:
+      tags:
+        - developers
+      summary: updates an developer item
+      description: Updates a developer to the system
+      operationId: updateDeveloper
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: uuid
+          type: string
+          required: true
+        - in: body
+          name: developerItem
+          description: Developer item to update
+          required: false
+          schema:
+            $ref: '#/definitions/DeveloperItem'
+      responses:
+        "200":
+          description: item updated
+    delete:
+      tags:
+        - developers
+      summary: deletes an developer item
+      description: Deletes a developer
+      operationId: deleteDeveloper
+      parameters:
+        - in: path
+          name: uuid
+          type: string
+          required: true
+      responses:
+        "204":
+          description: item destroyed
 definitions:
   DeveloperItem:
     type: object
@@ -83,10 +117,16 @@ definitions:
         example: http://url.com/photo.jpg
       techs:
         type: array
-        example: ""
-      latitude:
-        type: number
-        example: 349.9821
-      longitude:
-        type: number
-        example: 349.9821
+        items:
+          type: string
+      location:
+        type: object
+        properties:
+          latitude:
+            type: number
+            example:
+              28.02912
+          longitude:
+            type: number
+            example:
+              -98.29121
