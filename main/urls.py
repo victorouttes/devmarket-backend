@@ -19,7 +19,7 @@ from rest_framework import routers
 from developers import views
 
 router = routers.DefaultRouter()
-router.register('developers', views.DeveloperViewSet)
+router.register('developers', views.DeveloperViewSet, basename='developer')
 
 urlpatterns = [
     path('', include(router.urls)),

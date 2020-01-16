@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.gis.db import models as geo_models
 import uuid
 
 
@@ -9,8 +10,7 @@ class Developer(models.Model):
     bio = models.TextField(null=True, blank=True)
     avatar_url = models.CharField(max_length=255, null=True, blank=True)
     techs = models.TextField(null=True, blank=True)
-    latitude = models.DecimalField(null=True, decimal_places=6, max_digits=10)
-    longitude = models.DecimalField(null=True, decimal_places=6, max_digits=10)
+    location = geo_models.PointField(null=True)
 
     def __str__(self):
         if self.name:

@@ -1,6 +1,7 @@
 import json
 import requests
 from rest_framework import serializers
+from drf_extra_fields.geo_fields import PointField
 
 from developers import models
 
@@ -22,21 +23,27 @@ class TechCustomField(serializers.ListField):
 
 
 class DeveloperSerializer(serializers.HyperlinkedModelSerializer):
-    techs = TechCustomField(required=False)
+    techs = TechCustomField(required=False, default=[])
+    location = PointField()
 
     def create(self, validated_data):
         github_user = validated_data.get('github_username')
-        gituser = requests.get('https://api.github.com/users/{}'.format(github_user)).json()
-        if not gituser['name']:
-            gituser['name'] = gituser['login']
 
-        data = {
-            'name': gituser['name'],
-            'bio': gituser['bio'],
-            'avatar_url': gituser['avatar_url'],
-            **validated_data
-        }
-        return super(DeveloperSerializer, self).create(data)
+        try:
+            dev = models.Developer.objects.get(github_username=github_user)
+            return dev
+        except models.Developer.DoesNotExist:
+            gituser = requests.get('https://api.github.com/users/{}'.format(github_user)).json()
+            if not gituser['name']:
+                gituser['name'] = gituser['login']
+
+            data = {
+                'name': gituser['name'],
+                'bio': gituser['bio'],
+                'avatar_url': gituser['avatar_url'],
+                **validated_data
+            }
+            return super(DeveloperSerializer, self).create(data)
 
     class Meta:
         model = models.Developer
