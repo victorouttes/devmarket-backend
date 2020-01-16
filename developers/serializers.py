@@ -34,9 +34,16 @@ class DeveloperSerializer(serializers.HyperlinkedModelSerializer):
             return dev
         except models.Developer.DoesNotExist:
             gituser = requests.get('https://api.github.com/users/{}'.format(github_user)).json()
+
+            if 'message' in gituser:
+                return super(DeveloperSerializer, self).create(validated_data)
+
             if not gituser['name']:
                 gituser['name'] = gituser['login']
 
+            validated_data.pop('name')
+            validated_data.pop('bio')
+            validated_data.pop('avatar_url')
             data = {
                 'name': gituser['name'],
                 'bio': gituser['bio'],
