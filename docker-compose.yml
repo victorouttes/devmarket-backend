@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    container_name: devmarket-backend
+    restart: always
+    env_file:
+      - .env
+    command:
+      bash -c "python manage.py collectstatic --no-input && python manage.py migrate && gunicorn --workers=3 main.wsgi -b 0.0.0.0:8000"
+    expose:
+      - 8000
+    volumes:
+      - static_volume:/home/appl/web/staticfiles
+
+  nginx:
+    image: nginx:latest
+    container_name: devmarket-nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d
+      - static_volume:/home/appl/web/staticfiles
+    depends_on:
+      - app
+
+volumes:
+  static_volume:

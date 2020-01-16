@@ -22,7 +22,7 @@ class TechCustomField(serializers.ListField):
 
 
 class DeveloperSerializer(serializers.HyperlinkedModelSerializer):
-    techs = TechCustomField()
+    techs = TechCustomField(required=False)
 
     def create(self, validated_data):
         github_user = validated_data.get('github_username')

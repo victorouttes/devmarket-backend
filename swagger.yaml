@@ -1,0 +1,92 @@
+---
+swagger: "2.0"
+info:
+  description: Dev-Market API (Sample Django Rest Framework)
+  version: 1.0.0
+  title: Dev-Market API
+  contact:
+    email: victor.outtes@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+- name: developers
+  description: Operations available to regular developers
+schemes:
+- https
+paths:
+  /developers:
+    get:
+      tags:
+      - developers
+      summary: lists all developers
+      description: |
+        Just list all developers with pagination.
+      operationId: listDevelopers
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: resultas
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeveloperItem'
+        "400":
+          description: bad input parameter
+    post:
+      tags:
+      - developers
+      summary: adds an developer item
+      description: Adds a developer to the system
+      operationId: addDeveloper
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: developerItem
+        description: Developer item to add
+        required: false
+        schema:
+          $ref: '#/definitions/DeveloperItem'
+      responses:
+        "201":
+          description: item created
+        "400":
+          description: invalid input, object invalid
+        "409":
+          description: an existing item already exists
+definitions:
+  DeveloperItem:
+    type: object
+    required:
+    - github_username
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      github_username:
+        type: string
+        example: fancy_login
+      name:
+        type: string
+        example: My Fancy Name
+      bio:
+        type: string
+        example: My bio
+      avatar_url:
+        type: string
+        example: http://url.com/photo.jpg
+      techs:
+        type: array
+        example: ""
+      latitude:
+        type: number
+        example: 349.9821
+      longitude:
+        type: number
+        example: 349.9821
