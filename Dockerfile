@@ -1,5 +1,6 @@
 FROM python:3.7
 RUN apt-get update && apt-get install libsasl2-dev python3-dev libldap2-dev libpq-dev libssl-dev -y
+RUN apt-get install libsqlite3-mod-spatialite gdal-bin -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y locales
 RUN sed -i -e 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
