@@ -23,8 +23,8 @@ class TechCustomField(serializers.ListField):
 
 
 class DeveloperSerializer(serializers.HyperlinkedModelSerializer):
-    techs = TechCustomField(required=False, default=[])
-    location = PointField(required=False)
+    techs = TechCustomField(required=False, default=[], allow_null=True)
+    location = PointField(required=False, allow_null=True)
 
     def create(self, validated_data):
         github_user = validated_data.get('github_username')
