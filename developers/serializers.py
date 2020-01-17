@@ -41,9 +41,12 @@ class DeveloperSerializer(serializers.HyperlinkedModelSerializer):
             if not gituser['name']:
                 gituser['name'] = gituser['login']
 
-            validated_data.pop('name')
-            validated_data.pop('bio')
-            validated_data.pop('avatar_url')
+            if 'name' in validated_data:
+                validated_data.pop('name')
+            if 'bio' in validated_data:
+                validated_data.pop('bio')
+            if 'avatar_url' in validated_data:
+                validated_data.pop('avatar_url')
             data = {
                 'name': gituser['name'],
                 'bio': gituser['bio'],
